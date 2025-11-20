@@ -1,44 +1,41 @@
-from fastapi import APIRouter, HTTPException, status
-
-from app.schemas.adb import AdbCommandRequest, AdbCommandResponse
-from app.services.adb_service import AdbService
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+import adbutils
 
 router = APIRouter(prefix="/adb", tags=["adb"])
 
 
-def get_adb_service():
-    return AdbService()
+class AdbRequest(BaseModel):
+    cmd: str = Field(..., min_length=1)
+    serial: str | None = None
+    timeout: int | None = None
 
 
-@router.post("/", response_model=AdbCommandResponse)
-def execute_adb_command(request: AdbCommandRequest):
-    """
-    Execute an ADB shell command on a connected Android device.
+@router.post("/")
+def execute(req: AdbRequest):
+    """Execute ADB shell command"""
+    try:
+        adb = adbutils.AdbClient(host="127.0.0.1", port=5037)
+        device = adb.device(serial=req.serial) if req.serial else adb.device_list()[0]
+        result = device.shell2(req.cmd, timeout=req.timeout)
 
-    - **cmd**: The shell command to execute (required)
-    - **serial**: Device serial number (optional, uses first device if not specified)
-    - **timeout**: Command timeout in seconds (optional)
-    """
-    service = get_adb_service()
-    result = service.execute_command(
-        cmd=request.cmd,
-        serial=request.serial,
-        timeout=request.timeout
-    )
-    return result
+        return {
+            "success": result.returncode == 0,
+            "output": result.output.strip() if result.output else None,
+            "returncode": result.returncode,
+            "serial": device.serial,
+        }
+    except IndexError:
+        raise HTTPException(404, "No devices connected")
+    except adbutils.AdbError as e:
+        raise HTTPException(500, f"ADB error: {str(e)}")
 
 
 @router.get("/devices")
-def list_devices():
-    """
-    List all connected Android devices.
-    """
-    service = get_adb_service()
+def devices():
+    """List connected devices"""
     try:
-        devices = service.list_devices()
-        return {"devices": devices, "count": len(devices)}
+        adb = adbutils.AdbClient(host="127.0.0.1", port=5037)
+        return {"devices": [{"serial": d.serial, "state": d.state} for d in adb.device_list()]}
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
-        )
+        raise HTTPException(500, str(e))
