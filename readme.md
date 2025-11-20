@@ -1,6 +1,6 @@
-![yaya](https://github.com/y-ne/yaya/blob/main/yaya.jpg?raw=true)
-
 ## Yaya (夜々) of the Moon, Banned Doll Automaton.
+
+![yaya](https://github.com/y-ne/yaya/blob/main/yaya.jpg?raw=true)
 
 ## Dev Notes
 
