@@ -9,5 +9,28 @@ uv python list
 uv python pin cpython-3.14.0-macos-aarch64-none
 
 # development
-uv run fastapi dev main.py
+uv run fastapi dev app/main.py
+```
+
+## Project Structure
+
+```
+yaya/
+├── app/
+│   ├── __init__.py
+│   ├── main.py              # ← Main entry point
+│   ├── core/
+│   │   ├── config.py
+│   │   └── database.py
+│   ├── models/
+│   │   └── *.py
+│   ├── schemas/
+│   │   └── *.py
+│   ├── routers/
+│   │   └── *.py
+│   └── services/
+│       └── *_service.py
+├── .env.example
+├── pyproject.toml
+└── readme.md
 ```
