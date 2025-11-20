@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import db
-from app.routers import skel_router
+from app.routers import adb_router, skel_router
 from app.services.skel_service import SkelService
 
 
@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(adb_router)
 app.include_router(skel_router)
 
 
