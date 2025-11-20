@@ -18,4 +18,10 @@ class AdbService:
         )
 
     def list_devices(self) -> list[dict]:
-        return [{"serial": d.serial, "state": d.state} for d in self.adb.device_list()]
+        devices = []
+        for info in self.adb.list():
+            devices.append({
+                "serial": info.serial,
+                "state": info.state
+            })
+        return devices
