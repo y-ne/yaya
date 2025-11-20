@@ -1,3 +1,5 @@
+![yaya](https://github.com/y-ne/yaya/blob/main/yaya.jpg?raw=true)
+
 ## Yaya (夜々) of the Moon, Banned Doll Automaton.
 
 ## Dev Notes
@@ -18,7 +20,7 @@ uv run fastapi dev app/main.py
 yaya/
 ├── app/
 │   ├── __init__.py
-│   ├── main.py              # ← Main entry point
+│   ├── main.py
 │   ├── core/
 │   │   ├── config.py
 │   │   └── database.py
