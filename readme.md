@@ -1,10 +1,13 @@
-## Yaya (夜々) of the Moon, Banned Doll
+## Yaya (夜々) of the Moon, Banned Doll Automaton.
 
-### Dev Notes
+## Dev Notes
 
 ```
-# i'm using cpython-3.14.0-macos-aarch64-none
 uv python list
 
+# i'm locking python 3.14.0
 uv python pin cpython-3.14.0-macos-aarch64-none
+
+# development
+uv run fastapi dev main.py
 ```
