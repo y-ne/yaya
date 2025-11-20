@@ -7,7 +7,7 @@ class AdbService:
         self.adb = adbutils.AdbClient(host=host, port=port)
 
     def execute(self, req: AdbRequest) -> AdbResponse:
-        device = self.adb.device(serial=req.serial) if req.serial else self.adb.device_list()[0]
+        device = self.adb.device(serial=req.serial) if req.serial else self.adb.device()
         result = device.shell2(req.cmd, timeout=req.timeout)
 
         return AdbResponse(
@@ -18,10 +18,4 @@ class AdbService:
         )
 
     def list_devices(self) -> list[dict]:
-        devices = []
-        for info in self.adb.list():
-            devices.append({
-                "serial": info.serial,
-                "state": info.state
-            })
-        return devices
+        return [{"serial": info.serial, "state": info.state} for info in self.adb.list()]
