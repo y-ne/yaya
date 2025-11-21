@@ -17,6 +17,10 @@ uv run fastapi dev app/main.py
 
 # fully disabled GIL
 uv run python -X gil=0 -m fastapi dev app/main.py
+
+# Note :
+# opencv-python doesn't work on 3.14.0t, so downgrade to 3.12.12
+uv python pin cpython-3.12.12-macos-aarch64-none
 ```
 
 ## Project Structure
