@@ -7,11 +7,16 @@
 ```
 uv python list
 
-# i'm locking python 3.14.0
-uv python pin cpython-3.14.0-macos-aarch64-none
+# i'm locking python 3.14.0 with GIL disabled
+uv python pin cpython-3.14.0+freethreaded-macos-aarch64-none
+
+uv sync
 
 # development
 uv run fastapi dev app/main.py
+
+# fully disabled GIL
+uv run python -X gil=0 -m fastapi dev app/main.py
 ```
 
 ## Project Structure
